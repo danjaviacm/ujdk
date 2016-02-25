@@ -1,0 +1,435 @@
+// Color variables (appears count calculates by raw css)
+@color0: #007eff;
+@color1: #333333;
+@color2: #999999;
+@color3: #cccccc;
+@color4: #666666;
+@color5: #fcfcfc;
+@color6: #ffffff;
+@color7: #e3e3e3;
+@color8: #0071e6;
+@color9: #aaaaaa;
+@color10: #d9d9d9;
+@color11: #b3b3b3;
+
+// Width variables
+@width2: 17px;
+@width3: 100%;
+@width4: 16px;
+
+// Height variables
+@height3: 34px;
+
+.Select {
+	position: relative;
+}
+
+.Select, .Select div, .Select input, .Select span  {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.Select.is-disabled>.Select-control {
+	background-color: #f9f9f9;
+	&:hover {
+		box-shadow: none;
+	}
+
+}
+
+.Select.is-disabled {
+	.Select-arrow-zone {
+		cursor: default;
+		pointer-events: none;
+	}
+
+}
+
+.Select-control {
+	background-color: @color6;
+	border-color: @color10 @color3 #b3b3b3;
+	border-radius: 4px;
+	border: 1px solid @color3;
+	color: @color1;
+	cursor: default;
+	display: table;
+	height: 36px;
+	outline: none;
+	overflow: hidden;
+	position: relative;
+	width: @width3;
+	&:hover {
+		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+	}
+
+	&:not(.is-searchable)>.Select-input {
+		outline: none;
+	}
+
+}
+
+.is-searchable.is-open>.Select-control {
+	cursor: text;
+}
+
+.is-open>.Select-control {
+	background: @color6;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-color: #b3b3b3 @color3 @color10;
+}
+
+.is-open>.Select-control>.Select-arrow {
+	border-color: transparent transparent @color2;
+	border-width: 0 5px 5px;
+}
+
+.is-searchable.is-focused {
+	&:not(.is-open)>.Select-control {
+		cursor: text;
+	}
+
+}
+
+.is-focused {
+	&:not(.is-open)>.Select-control {
+		border-color: @color0;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(0, 126, 255, 0.1);
+	}
+
+	.Select-input>input {
+		cursor: text;
+	}
+
+}
+
+.Select-placeholder {
+	bottom: 0;
+	color: @color9;
+	left: 0;
+	line-height: @height3;
+	max-width: @width3;
+	overflow: hidden;
+	padding-left: 10px;
+	padding-right: 10px;
+	position: absolute;
+	right: 0;
+	text-overflow: ellipsis;
+	top: 0;
+	white-space: nowrap;
+
+	&:not(.Select--multi)>.Select-control {
+		.Select-value {
+			bottom: 0;
+			color: @color9;
+			left: 0;
+			line-height: @height3;
+			max-width: @width3;
+			overflow: hidden;
+			padding-left: 10px;
+			padding-right: 10px;
+			position: absolute;
+			right: 0;
+			text-overflow: ellipsis;
+			top: 0;
+			white-space: nowrap;
+		}
+
+	}
+}
+
+.has-value {
+	&:not(.Select--multi)>.Select-control>.Select-value {
+		.Select-value-label {
+			color: @color1;
+		}
+
+		a.Select-value-label {
+			cursor: pointer;
+			text-decoration: none;
+		}
+
+	}
+
+}
+
+.has-value.is-pseudo-focused {
+	&:not(.Select--multi)>.Select-control>.Select-value {
+		.Select-value-label {
+			color: @color1;
+		}
+
+		a.Select-value-label {
+			cursor: pointer;
+			text-decoration: none;
+		}
+
+	}
+
+	.Select-input {
+		opacity: 0;
+	}
+
+}
+
+.has-value:not(.Select--multi)>.Select-control>.Select-value a.Select-value-label:hover, .has-value.is-pseudo-focused:not(.Select--multi)>.Select-control>.Select-value a.Select-value-label:hover, .has-value:not(.Select--multi)>.Select-control>.Select-value a.Select-value-label:focus, .has-value.is-pseudo-focused:not(.Select--multi)>.Select-control>.Select-value a.Select-value-label:focus  {
+	color: @color0;
+	outline: none;
+	text-decoration: underline;
+}
+
+.Select-input {
+	height: @height3;
+	padding-left: 10px;
+	padding-right: 10px;
+	vertical-align: middle;
+}
+
+.Select-input>input {
+	-webkit-appearance: none;
+	background: none transparent;
+	border: 0 none;
+	box-shadow: none;
+	cursor: default;
+	display: inline-block;
+	font-family: inherit;
+	font-size: inherit;
+	height: @height3;
+	margin: 0;
+	outline: none;
+	padding: 0;
+}
+
+.Select-loading-zone {
+	cursor: pointer;
+	display: table-cell;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: @width4;
+}
+
+.Select-loading {
+	-o-animation: Select-animation-spin 400ms infinite linear;
+	-webkit-animation: Select-animation-spin 400ms infinite linear;
+	animation: Select-animation-spin 400ms infinite linear;
+	border-radius: 50%;
+	border-right-color: @color1;
+	border: 2px solid @color3;
+	box-sizing: border-box;
+	display: inline-block;
+	height: 16px;
+	position: relative;
+	vertical-align: middle;
+	width: @width4;
+}
+
+.Select-clear-zone {
+	-o-animation: Select-animation-fadeIn 200ms;
+	-webkit-animation: Select-animation-fadeIn 200ms;
+	animation: Select-animation-fadeIn 200ms;
+	color: @color2;
+	cursor: pointer;
+	display: table-cell;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: @width2;
+	&:hover {
+		color: #D0021B;
+	}
+
+}
+
+.Select-clear {
+	display: inline-block;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.Select--multi {
+	.Select-clear-zone {
+		width: @width2;
+	}
+
+	.Select-input {
+		margin-left: 10px;
+		padding: 0;
+		vertical-align: middle;
+	}
+
+	.Select-value {
+		background-color: rgba(0, 126, 255, 0.08);
+		border-radius: 2px;
+		border: 1px solid rgba(0, 126, 255, 0.24);
+		color: @color0;
+		display: inline-block;
+		font-size: 0.9em;
+		line-height: 1.4;
+		margin-left: 5px;
+		margin-top: 5px;
+		vertical-align: top;
+	}
+
+	.Select-value-icon {
+		border-bottom-left-radius: 2px;
+		border-right: 1px solid rgba(0, 126, 255, 0.24);
+		border-top-left-radius: 2px;
+		cursor: pointer;
+		display: inline-block;
+		padding: 1px 5px 3px;
+		vertical-align: middle;
+		&:hover {
+			background-color: rgba(0, 113, 230, 0.08);
+			color: @color8;
+		}
+
+		&:focus {
+			background-color: rgba(0, 113, 230, 0.08);
+			color: @color8;
+		}
+
+		&:active {
+			background-color: rgba(0, 126, 255, 0.24);
+		}
+
+	}
+
+	.Select-value-label {
+		border-bottom-right-radius: 2px;
+		border-top-right-radius: 2px;
+		cursor: default;
+		display: inline-block;
+		padding: 2px 5px;
+		vertical-align: middle;
+	}
+
+	a.Select-value-label {
+		color: @color0;
+		cursor: pointer;
+		text-decoration: none;
+		&:hover {
+			text-decoration: underline;
+		}
+
+	}
+
+}
+
+.Select-arrow-zone {
+	cursor: pointer;
+	display: table-cell;
+	padding-right: 5px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: 25px;
+	&:hover>.Select-arrow {
+		border-top-color: @color4;
+	}
+
+}
+
+.Select-arrow {
+	border-color: @color2 transparent transparent;
+	border-style: solid;
+	border-width: 5px 5px 2.5px;
+	display: inline-block;
+	height: 0;
+	width: 0;
+}
+
+.is-open {
+	.Select-arrow {
+		border-top-color: @color4;
+	}
+
+}
+
+.Select-menu-outer {
+	-webkit-overflow-scrolling: touch;
+	background-color: @color6;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-top-color: #e6e6e6;
+	border: 1px solid @color3;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+	box-sizing: border-box;
+	margin-top: -1px;
+	max-height: 200px;
+	position: absolute;
+	top: 100%;
+	width: @width3;
+	z-index: 1;
+}
+
+.Select-menu {
+	max-height: 198px;
+	overflow-y: auto;
+}
+
+.Select-option {
+	background-color: @color6;
+	box-sizing: border-box;
+	color: @color4;
+	cursor: pointer;
+	display: block;
+	padding: 8px 10px;
+	&:last-child {
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+
+}
+
+.Select-option.is-focused {
+	background-color: rgba(0, 126, 255, 0.08);
+	color: @color1;
+}
+
+.Select-option.is-disabled {
+	color: @color3;
+	cursor: default;
+}
+
+.Select-noresults {
+	box-sizing: border-box;
+	color: @color2;
+	cursor: default;
+	display: block;
+	padding: 8px 10px;
+}
+
+.Select--multi.has-value {
+	.Select-input {
+		margin-left: 5px;
+	}
+
+}
+
+.Select--multi.is-disabled {
+	.Select-value {
+		background-color: @color5;
+		border: 1px solid @color7;
+		color: @color1;
+	}
+
+	.Select-value-icon {
+		border-right: 1px solid @color7;
+		cursor: not-allowed;
+		&:hover {
+			background-color: @color5;
+		}
+
+		&:focus {
+			background-color: @color5;
+		}
+
+		&:active {
+			background-color: @color5;
+		}
+
+	}
+
+}

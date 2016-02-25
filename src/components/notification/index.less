@@ -1,0 +1,102 @@
+// Variables
+@screen-sm-max: 991px;
+@screen-xs-max: 767px;
+@screen-xs-min: 320px;
+
+// Mixins
+.translateX( @translateX ) {
+	-webkit-transform: translateX( @translateX );
+	   -moz-transform: translateX( @translateX );
+	    -ms-transform: translateX( @translateX );
+	     -o-transform: translateX( @translateX );
+	        transform: translateX( @translateX );
+}
+
+.notification {
+	position: fixed;
+	top: 100px;
+	right: 100px;
+	display: inline-block;
+	vertical-align: top;
+	zoom: 1; /* Fix for IE7 */
+	*display: inline; /* Fix for IE7 */
+	box-sizing: border-box;
+	padding: 10px;
+	border-radius: 7px;
+	margin-top: 15px;
+	font-size: 16px;
+	z-index: 99;
+
+	// Sizes
+	&__big {
+		padding: 25px;
+	}
+
+	&__small {
+		padding: 5px;
+		font-size: 12px;
+	}
+
+	// Decorators
+	&__squared {
+		border-radius: 0;
+	}
+
+	&__rounded {
+		border-radius: 50%;
+	}
+
+	// Modificators
+	&--error {
+		background: rgba(255, 51, 51, 0.99);
+		color: white;
+	}
+
+	&--default {
+		background: rgba(60, 66, 62, 0.992157);
+		color: white;
+	}
+
+	&--success {
+		background: rgba(38, 185, 90, 0.99);
+		color: white;
+	}
+
+	&--info {
+		background: rgba(51, 142, 255, 0.99);
+		color: white;
+	}
+
+	&--warning {
+		background: rgba(255, 164, 51, 0.99);
+		color: white;
+	}
+
+
+	// Media Query Elements
+	@media ( max-width: @screen-sm-max ) {
+		
+	}
+
+	@media ( max-width: @screen-xs-max ) {
+		position: fixed;
+		top: auto;
+		bottom: 50px;
+		right: 0;
+		left: 50%;
+		padding: 5px;
+		border-radius: 10px;
+		.translateX( -50% );
+	}
+
+	@media ( max-width: @screen-xs-min ) {
+		position: fixed;
+		top: auto;
+		bottom: 25px;
+		right: 0;
+		left: 50%;
+		padding: 5px;
+		border-radius: 10px;
+		.translateX( -50% );
+	}
+}
