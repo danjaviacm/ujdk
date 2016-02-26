@@ -1,8 +1,23 @@
 import Woopra from 'woopra'
 import $ from 'jquery'
+import is from 'is_js'
 
+/*
+ * UJDK
+ * 
+ * A simple class for tracking the user behavior
+ * and communicate with another domains.
+ */
 export default class UJDK {
 
+	/* constructor
+	 *
+	 * @param domain configuratión for woopra
+	 * @param ssl allow ssl connections woopra
+	 * @param channel non organic traffic sources
+	 * @param uj UJ name to be used by the user
+	 * @param uid random user identifier
+	 */
 	constructor ( domain, ssl, channel, uj, uid  ) {
 
 		if ( typeof domain === 'undefined' )
@@ -14,6 +29,15 @@ export default class UJDK {
 		this._is_ssl = ssl
 		this._domain = domain
 
+		this._allowed_urls = [
+        	'http://example.org:8081',
+        	'https://seguros.comparamejor.com',
+        	'https://unbounce.com',
+        	'https://cotiza.comparamejor.com',
+        	'https://comparamejor.com',
+        	'http://localhost:5000'
+        ]
+
 		this._woopra = new Woopra( this._domain )
 
 		if ( this._is_ssl ) {
@@ -23,11 +47,16 @@ export default class UJDK {
 			})
 		}
 
-		this._woopra.identify( uid, {
-		    channel: channel,
-		    uj: uj
-		}).push()
+		if ( typeof this._channel !== 'undefined' && typeof this._uj !== 'undefined' && typeof this._uid !== 'undefined' ) {
+			this._woopra.identify( uid, {
+			    channel: channel,
+			    uj: uj
+			}).push()
+		}
 	}
+
+
+	// Setters & Getters
 
 	set channel ( ch ) {
 		super.channel = ch
@@ -57,6 +86,14 @@ export default class UJDK {
 		return this._is_ssl
 	}
 
+
+	/*
+	 * track
+	 *
+	 * allow to track any event in the client side
+	 * @param evName name of event to track
+	 * @param data info will be to send to woopra
+	 */
 	track ( evName, data ) {
 
 		try {
@@ -73,6 +110,13 @@ export default class UJDK {
 		}
 	}
 
+	/*
+ 	 * openChannelTo
+ 	 * 
+ 	 * create the channel of comunication to dest url
+ 	 * @param destURL url for bridge
+ 	 * @param idChannel channel name 
+	 */
 	openChannelTo ( destURL, idChannel ) {
 
 		if ( typeof idChannel === 'undefined' )
@@ -103,23 +147,53 @@ export default class UJDK {
 	}
 
 
-	sendMessage ( domain, message, idChannel ) {
+	/*
+	 * sendMessage
+	 * 
+	 * send a custom message to the destiny url in the same 
+	 * or another domain
+	 * @param message message to send
+	 * @param domain message receiver domain
+	 * @idChannel channel bridge name
+	 */
+	sendMessage ( message, domain, idChannel ) {
 
 		if ( typeof idChannel === 'undefined' )
 			idChannel = 'receiverChannel'
 		
 		let receiver = document.getElementById( idChannel ).contentWindow
-		
+
 		receiver.postMessage( message, domain )
 	}
 
-	receiveMessage ( ev, cb ) {
+	/*
+	 * receiveMessage
+	 * 
+	 * receive message from origin window and manage received data
+	 * set info package between origin domain and the bridge
+	 * @param event event passed to the final or destininy domain
+	 */
+	receiveMessage ( event ) {
 
-		window.addEventListener( ev, cb() )
+        let origin = event.origin
 
+        let allowedURLs = this._allowed_urls
+		
+		if ( allowedURLs.indexOf( origin ) == -1 ) {
+			throw new Error( 'No tienes permisos de acceso para realizar esta acción.' )
+		}
+
+		console.log( 'me echaron madres' )
+        console.log( event, 'no se que soys' )
 	}
 
 
+	/*
+ 	 * log
+ 	 * 
+ 	 * log data
+ 	 * @param data data for log
+	 */
 	log ( data ) {
 
 		console.log( data )

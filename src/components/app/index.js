@@ -40,14 +40,16 @@ export default class App extends Component {
 		}
 	}
 
-	componentDidMount () {
-		this._ujdk.sendMessage( 'http://localhost:8081', 'sere mas grande que tu' )
+	clicked () {
+
+		this._ujdk.sendMessage( 'sere mas grande que tu', 'http://localhost:8081' )
 	}
 
 	render() {
 		return (
 			<div>
 				Cuando sea grande, voy a ser un hermoso Landing Page!
+				<button onClick={ this.clicked.bind( this ) } >click me</button>
 			</div>
 		);
 	}
