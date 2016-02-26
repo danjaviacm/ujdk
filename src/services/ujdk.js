@@ -23,6 +23,19 @@ export default class UJDK {
 		if ( typeof domain === 'undefined' )
 			domain = 'comparamejor.com'
 
+		if ( typeof ssl === 'undefined' )
+			ssl = true
+
+		if ( typeof channel === 'undefined' )
+			channel = 'SEM'
+
+		if ( typeof uj === 'undefined' )
+			uj = 'uj40'
+
+		if ( typeof uid === 'undefined' )
+			uid = `user-${ Date.now() }-${ Math.floor( ( Math.random() * 100 ) + 1 ) }`
+
+
 		this._channel = channel
 		this._uj = uj
 		this._uid = uid
@@ -57,6 +70,14 @@ export default class UJDK {
 
 
 	// Setters & Getters
+
+	set allowed_urls ( url ) {
+		super.allowed_urls = this._allowed_urls.push( url )
+	}
+
+	get allowed_urls () {
+		return this._allowed_urls
+	}
 
 	set channel ( ch ) {
 		super.channel = ch
@@ -177,14 +198,20 @@ export default class UJDK {
 
         let origin = event.origin
 
-        let allowedURLs = this._allowed_urls
+        let allowedURLs = this._allowed_urls || [
+        	'http://example.org:8081',
+        	'https://seguros.comparamejor.com',
+        	'https://unbounce.com',
+        	'https://cotiza.comparamejor.com',
+        	'https://comparamejor.com',
+        	'http://localhost:5000'
+        ]
 		
 		if ( allowedURLs.indexOf( origin ) == -1 ) {
 			throw new Error( 'No tienes permisos de acceso para realizar esta acción.' )
 		}
 
-		console.log( 'me echaron madres' )
-        console.log( event, 'no se que soys' )
+		console.log( event )
 	}
 
 
