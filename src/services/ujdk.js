@@ -66,6 +66,7 @@ export default class UJDK {
 			    uj: uj
 			}).push()
 		}
+ 
 	}
 
 
@@ -210,6 +211,10 @@ export default class UJDK {
 		if ( allowedURLs.indexOf( origin ) == -1 ) {
 			throw new Error( 'No tienes permisos de acceso para realizar esta acción.' )
 		}
+
+		// Do magic here
+
+		// guardar uid en storage
 
 		console.log( event )
 	}
