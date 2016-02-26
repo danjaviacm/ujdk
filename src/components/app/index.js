@@ -34,8 +34,6 @@ export default class App extends Component {
 		})
 
 		this._ujdk.openChannelTo( 'http://localhost:8081' )
-		
-		this._ujdk.sendMessage( 'http://localhost:8081', 'sere mas grande que tu' )
 
 		globalState.callback = ( data ) => {
 			this.setState( data )
@@ -43,7 +41,7 @@ export default class App extends Component {
 	}
 
 	componentDidMount () {
-
+		this._ujdk.sendMessage( 'http://localhost:8081', 'sere mas grande que tu' )
 	}
 
 	render() {

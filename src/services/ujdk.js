@@ -109,7 +109,7 @@ export default class UJDK {
 			idChannel = 'receiverChannel'
 		
 		let receiver = document.getElementById( idChannel ).contentWindow
-
+		
 		receiver.postMessage( message, domain )
 	}
 
