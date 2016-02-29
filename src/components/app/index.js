@@ -23,7 +23,7 @@ export default class App extends Component {
 		// 	'mancuso'
 		// ]
 
-		this._ujdk = new UJDK()
+		this._ujdk = UJDK
 
 	}
 

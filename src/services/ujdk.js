@@ -8,7 +8,7 @@ import is from 'is_js'
  * A simple class for tracking the user behavior
  * and communicate with another domains.
  */
-export default class UJDK {
+class UJDK {
 
 	/* constructor
 	 *
@@ -59,8 +59,6 @@ export default class UJDK {
 			uid: this._uid
 		}
 
-		console.log( this._user_basic_data )
-
 		if ( this._is_ssl ) {
 
 			this._woopra.config({
@@ -68,10 +66,10 @@ export default class UJDK {
 			})
 		}
 
-		if ( typeof this._channel !== 'undefined' && typeof this._uj !== 'undefined' && typeof this._uid !== 'undefined' ) {
-			this._woopra.identify( uid, {
-			    channel: channel,
-			    uj: uj
+		if ( typeof this._channel !== 'undefined' && typeof this._uj !== 'undefined' && typeof this._uid !== 'undefined' && this.inIframe() == false ) {
+			this._woopra.identify( this._uid, {
+			    channel: this._channel,
+			    uj: this._uj
 			}).push()
 		}
  
@@ -118,6 +116,14 @@ export default class UJDK {
 
 	get storage() {
 		return JSON.parse( localStorage.wuid )
+	}
+
+	inIframe () {
+	    try {
+	        return window.self !== window.top
+	    } catch ( e ) {
+	        return true
+	    }
 	}
 
 	/*
@@ -242,21 +248,32 @@ export default class UJDK {
 		}
 
 		// Do magic here
-		console.log( event.data )
 		if ( ! localStorage.wuid )
 			localStorage.wuid = JSON.stringify( event.data )
 		
-		else {
+	}
 
-			let originData = JSON.stringify( localStorage.wuid )
+	overrideWUID () {
+
+		if ( localStorage.wuid ) {
+
+			let originData = JSON.parse( localStorage.wuid )
 			
-			ujdk._uid = originData.uid
-			ujdk._channel = originData.channel
-			ujdk._uj = originalData.uj
-		}
-		// guardar uid en storage
+			this._uid = originData.uid
+			this._channel = originData.channel
+			this._uj = originData.uj
 
-		console.log( event, ujdk )
+			this._woopra.identify( this._uid, {
+			    channel: this._channel,
+			    uj: this._uj
+			}).push()
+
+			return true
+		}
+
+		else {
+			return false
+		}
 	}
 
 
@@ -274,3 +291,5 @@ export default class UJDK {
 	}
 
 }
+
+export default new UJDK()
