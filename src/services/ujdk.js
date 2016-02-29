@@ -1,6 +1,7 @@
 import Woopra from 'woopra'
 import $ from 'jquery'
 import is from 'is_js'
+import _ from 'underscore'
 
 /*
  * UJDK
@@ -41,6 +42,8 @@ class UJDK {
 		this._uid = uid
 		this._is_ssl = ssl
 		this._domain = domain
+
+		this._preferences = []
 
 		this._allowed_urls = [
         	'http://example.org:8081',
@@ -111,7 +114,15 @@ class UJDK {
 	}
 
 	get uid () {
-		return this.uid
+		return this._uid
+	}
+
+	set preferences ( preferences ) {
+		super.preferences = preferences
+	}
+
+	get preferences () {
+		return this._preferences
 	}
 
 	get ssl () {
@@ -185,20 +196,30 @@ class UJDK {
 	      	dataType: 'json',
 	      	success: (( data ) => {
 
-				console.log( data )
+	      		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown change", function( e ) {
+		    		console.log( data )
+	      			_.each( data.result, ( value ) => {
+
+	      				let events = JSON.parse( value.events )
+
+	      				if ( events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) ) ) {
+
+	      					this.track( 'usuario logueandose', {
+						    	description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
+								text: e.target.innerText,
+								targetElement: e.target.outerHTML
+							})
+	      				}
+	      				
+	      			})
+				    
+				}.bind( this ))
+	      	}),
+	      	error: (( error ) => {
+	      		console.log( error )
 	      	})
 	    })
-
-		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown change", function( e ) {
-		    
-		    console.log( e.target, e.type, e )
-
-		    this.track( 'usuario logueandose', {
-		    	description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
-				text: e.target.innerText,
-				targetElement: e.target.outerHTML
-			})
-		}.bind( this ))
+		
 	}
 
 	/*
@@ -223,10 +244,10 @@ class UJDK {
 			let iframe = document.createElement( 'iframe' )
 
 			// Set iframe attrs
-			// iframe.width = 0
-			// iframe.height = 0
+			iframe.width = 0
+			iframe.height = 0
 			iframe.id = idChannel
-			// iframe.style.display = 'none'
+			iframe.style.display = 'none'
 			iframe.src = destURL
 
 			document.body.appendChild( iframe )
