@@ -197,11 +197,11 @@ class UJDK {
 	      	success: (( data ) => {
 
 	      		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown change", function( e ) {
-		    		console.log( data )
+		    		
 	      			_.each( data.result, ( value ) => {
 
 	      				let events = JSON.parse( value.events )
-
+	      				console.log( e.type, 'etype', e, events.indexOf( e.type ) != -1, $( e.target ).hasClass( value.element ), $( e.target ).attr( 'id', value.element ), events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) )  )
 	      				if ( events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) ) ) {
 
 	      					this.track( 'usuario logueandose', {
