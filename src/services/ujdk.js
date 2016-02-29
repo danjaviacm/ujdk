@@ -201,7 +201,7 @@ class UJDK {
 	      			_.each( data.result, ( value ) => {
 
 	      				let events = JSON.parse( value.events )
-	      				console.log( e.type, 'etype', e, events.indexOf( e.type ) != -1, $( e.target ).hasClass( value.element ), $( e.target ).attr( 'id', value.element ), events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) )  )
+	      				
 	      				if ( events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) ) ) {
 
 	      					this.track( 'usuario logueandose', {
@@ -210,6 +210,9 @@ class UJDK {
 								targetElement: e.target.outerHTML
 							})
 	      				}
+
+	      				else
+	      					console.log( e.type, 'no run' )
 	      				
 	      			})
 				    
