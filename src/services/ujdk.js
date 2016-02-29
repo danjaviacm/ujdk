@@ -66,7 +66,11 @@ class UJDK {
 			})
 		}
 
-		if ( typeof this._channel !== 'undefined' && typeof this._uj !== 'undefined' && typeof this._uid !== 'undefined' && this.inIframe() == false ) {
+		if ( typeof this._channel !== 'undefined' 
+			&& typeof this._uj !== 'undefined' 
+			&& typeof this._uid !== 'undefined' 
+			&& this.inIframe() == false 
+			&& this.overrideWUID() == false ) {
 			this._woopra.identify( this._uid, {
 			    channel: this._channel,
 			    uj: this._uj
