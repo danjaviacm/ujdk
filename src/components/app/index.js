@@ -15,15 +15,15 @@ export default class App extends Component {
 
 		this.state = {}
 
-		this.ujdkData = [
-			'comparamejor.com',
-			true,
-			'Facebook',
-			'uj40',
-			'mancuso'
-		]
+		// this.ujdkData = [
+		// 	'comparamejor.com',
+		// 	true,
+		// 	'Facebook',
+		// 	'uj40',
+		// 	'mancuso'
+		// ]
 
-		this._ujdk = new UJDK( ...this.ujdkData )
+		this._ujdk = new UJDK()
 
 	}
 
@@ -42,7 +42,13 @@ export default class App extends Component {
 
 	clicked () {
 
-		this._ujdk.sendMessage( 'sere mas grande que tu', 'http://localhost:8081' )
+		let originData = {
+			uj: this._ujdk._uj,
+			channel: this._ujdk._channel,
+			uid: this._ujdk._uid
+		}
+
+		this._ujdk.sendMessage( originData, 'http://localhost:8081' )
 	}
 
 	render() {

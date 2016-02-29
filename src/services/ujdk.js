@@ -53,6 +53,14 @@ export default class UJDK {
 
 		this._woopra = new Woopra( this._domain )
 
+		this._user_basic_data = {
+			channel: this._channel,
+			uj: this._uj,
+			uid: this._uid
+		}
+
+		// this.setStorage( this._user_basic_data )
+
 		if ( this._is_ssl ) {
 
 			this._woopra.config({
@@ -108,6 +116,27 @@ export default class UJDK {
 		return this._is_ssl
 	}
 
+	get storage() {
+		return JSON.parse( localStorage.wuid )
+	}
+
+	/*
+	 * setStorage
+	 * 
+	 * dave state of current user
+	 */
+	setStorage( data ) {
+		localStorage.wuid = JSON.stringify( data )
+	}
+
+	/*
+	 * delStorage
+	 * 
+	 * dave state of current user
+	 */
+	delStorage() {
+		delete localStorage.wuid
+	}
 
 	/*
 	 * track
@@ -213,7 +242,8 @@ export default class UJDK {
 		}
 
 		// Do magic here
-
+		console.log( event.data )
+		this.setStorage( event.data )
 		// guardar uid en storage
 
 		console.log( event )
