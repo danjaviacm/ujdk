@@ -49,6 +49,7 @@ export default class App extends Component {
 		}
 
 		this._ujdk.sendMessage( originData, 'http://localhost:8081' )
+		window.location.href = 'http://localhost:8081'
 	}
 
 	render() {

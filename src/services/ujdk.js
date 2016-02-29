@@ -59,7 +59,7 @@ export default class UJDK {
 			uid: this._uid
 		}
 
-		// this.setStorage( this._user_basic_data )
+		console.log( this._user_basic_data )
 
 		if ( this._is_ssl ) {
 
@@ -243,10 +243,20 @@ export default class UJDK {
 
 		// Do magic here
 		console.log( event.data )
-		this.setStorage( event.data )
+		if ( ! localStorage.wuid )
+			localStorage.wuid = JSON.stringify( event.data )
+		
+		else {
+
+			let originData = JSON.stringify( localStorage.wuid )
+			
+			ujdk._uid = originData.uid
+			ujdk._channel = originData.channel
+			ujdk._uj = originalData.uj
+		}
 		// guardar uid en storage
 
-		console.log( event )
+		console.log( event, ujdk )
 	}
 
 
