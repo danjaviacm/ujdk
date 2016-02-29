@@ -15,14 +15,6 @@ export default class App extends Component {
 
 		this.state = {}
 
-		// this.ujdkData = [
-		// 	'comparamejor.com',
-		// 	true,
-		// 	'Facebook',
-		// 	'uj40',
-		// 	'mancuso'
-		// ]
-
 		this._ujdk = UJDK
 
 	}

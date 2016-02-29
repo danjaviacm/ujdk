@@ -172,6 +172,36 @@ class UJDK {
 	}
 
 	/*
+ 	 * trackAll
+ 	 * 
+ 	 * track all posible events in the screen based in the 
+ 	 * marketing JSON data
+	 */
+	trackAll() {
+
+		$.ajax({
+	      	url: 'https://sheetsu.com/apis/33dcdcd9',
+	      	method: 'GET',
+	      	dataType: 'json',
+	      	success: (( data ) => {
+
+				console.log( data )
+	      	})
+	    })
+
+		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown change", function( e ) {
+		    
+		    console.log( e.target, e.type, e )
+
+		    this.track( 'usuario logueandose', {
+		    	description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
+				text: e.target.innerText,
+				targetElement: e.target.outerHTML
+			})
+		}.bind( this ))
+	}
+
+	/*
  	 * openChannelTo
  	 * 
  	 * create the channel of comunication to dest url
