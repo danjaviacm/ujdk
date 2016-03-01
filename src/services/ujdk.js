@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 /*
  * UJDK
- * 
+ *
  * A simple class for tracking the user behavior
  * and communicate with another domains.
  */
@@ -69,17 +69,17 @@ class UJDK {
 			})
 		}
 
-		if ( typeof this._channel !== 'undefined' 
-			&& typeof this._uj !== 'undefined' 
-			&& typeof this._uid !== 'undefined' 
-			&& this.inIframe() == false 
+		if ( typeof this._channel !== 'undefined'
+			&& typeof this._uj !== 'undefined'
+			&& typeof this._uid !== 'undefined'
+			&& this.inIframe() == false
 			&& this.overrideWUID() == false ) {
 			this._woopra.identify( this._uid, {
 			    channel: this._channel,
 			    uj: this._uj
 			}).push()
 		}
- 
+
 	}
 
 
@@ -143,7 +143,7 @@ class UJDK {
 
 	/*
 	 * setStorage
-	 * 
+	 *
 	 * dave state of current user
 	 */
 	setStorage( data ) {
@@ -152,7 +152,7 @@ class UJDK {
 
 	/*
 	 * delStorage
-	 * 
+	 *
 	 * dave state of current user
 	 */
 	delStorage() {
@@ -169,14 +169,14 @@ class UJDK {
 	track ( evName, data ) {
 
 		try {
-			
+
 			if ( typeof data !== 'undefined' ) {
 
 				this._woopra.track( evName, data )
 			}
 
 		} catch ( e ) {
-			
+
 			// statements
 			console.log( e )
 		}
@@ -184,8 +184,8 @@ class UJDK {
 
 	/*
  	 * trackAll
- 	 * 
- 	 * track all posible events in the screen based in the 
+ 	 *
+ 	 * track all posible events in the screen based in the
  	 * marketing JSON data
 	 */
 	trackAll() {
@@ -196,15 +196,35 @@ class UJDK {
 	      	dataType: 'json',
 	      	success: (( data ) => {
 
-	      		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown change", function( e ) {
-		    		
+	      		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown keyup change", function( e ) {
+
 	      			_.each( data.result, ( value ) => {
 
-	      				let events = JSON.parse( value.events )
-	      				
-	      				if ( events.indexOf( e.type ) != -1 && ( $( e.target ).hasClass( value.element ) || $( e.target ).attr( 'id', value.element ) ) ) {
+						let isElement = false
+						let useClass = ''
+						let useId = ''
 
-	      					this.track( 'usuario logueandose', {
+	      				let events = JSON.parse( value.events )
+
+						if ( value.element.indexOf( '.' ) !== -1 ) {
+							 useClass = value.element.substring( 1 )
+						}
+
+						else if ( value.element.indexOf( '#' ) !== -1 ) {
+							 useId = value.element.substring( 1 )
+						}
+
+						else {
+							isElement = true
+						}
+
+	      				if ( events.indexOf( e.type ) != -1
+							&& ( ( useClass.length > 2 && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
+							|| ( isElement && e.target.localName == value.element ) ) {
+
+							console.log( $( e.target ).hasClass( useClass ) )
+
+	      					this.track( value.name || 'usuario logueandose', {
 						    	description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
 								text: e.target.innerText,
 								targetElement: e.target.outerHTML
@@ -213,24 +233,24 @@ class UJDK {
 
 	      				else
 	      					console.log( e.type, 'no run' )
-	      				
+
 	      			})
-				    
+
 				}.bind( this ))
 	      	}),
 	      	error: (( error ) => {
 	      		console.log( error )
 	      	})
 	    })
-		
+
 	}
 
 	/*
  	 * openChannelTo
- 	 * 
+ 	 *
  	 * create the channel of comunication to dest url
  	 * @param destURL url for bridge
- 	 * @param idChannel channel name 
+ 	 * @param idChannel channel name
 	 */
 	openChannelTo ( destURL, idChannel ) {
 
@@ -242,7 +262,7 @@ class UJDK {
 		let nullate = [ null, 'null' ]
 
 		if ( nullate.indexOf( receiverChannel ) != -1 ) {
-			
+
 			// Create the tag into the page
 			let iframe = document.createElement( 'iframe' )
 
@@ -264,8 +284,8 @@ class UJDK {
 
 	/*
 	 * sendMessage
-	 * 
-	 * send a custom message to the destiny url in the same 
+	 *
+	 * send a custom message to the destiny url in the same
 	 * or another domain
 	 * @param message message to send
 	 * @param domain message receiver domain
@@ -275,7 +295,7 @@ class UJDK {
 
 		if ( typeof idChannel === 'undefined' )
 			idChannel = 'receiverChannel'
-		
+
 		let receiver = document.getElementById( idChannel ).contentWindow
 
 		receiver.postMessage( message, domain )
@@ -283,7 +303,7 @@ class UJDK {
 
 	/*
 	 * receiveMessage
-	 * 
+	 *
 	 * receive message from origin window and manage received data
 	 * set info package between origin domain and the bridge
 	 * @param event event passed to the final or destininy domain
@@ -300,7 +320,7 @@ class UJDK {
         	'https://comparamejor.com',
         	'http://localhost:5000'
         ]
-		
+
 		if ( allowedURLs.indexOf( origin ) == -1 ) {
 			throw new Error( 'No tienes permisos de acceso para realizar esta acción.' )
 		}
@@ -308,7 +328,7 @@ class UJDK {
 		// Do magic here
 		if ( ! localStorage.wuid )
 			localStorage.wuid = JSON.stringify( event.data )
-		
+
 	}
 
 	overrideWUID () {
@@ -316,7 +336,7 @@ class UJDK {
 		if ( localStorage.wuid ) {
 
 			let originData = JSON.parse( localStorage.wuid )
-			
+
 			this._uid = originData.uid
 			this._channel = originData.channel
 			this._uj = originData.uj
@@ -337,7 +357,7 @@ class UJDK {
 
 	/*
  	 * log
- 	 * 
+ 	 *
  	 * log data
  	 * @param data data for log
 	 */
