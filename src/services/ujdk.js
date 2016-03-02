@@ -194,8 +194,7 @@ class UJDK {
 		let preferences = this._preferences
 
 		$( 'a, span, select, input, form, button' ).on( "click keydown keyup change", function( e ) {
-			console.log( e )
-			// debugger
+			
 			_.each( preferences, ( value ) => {
 
 				let isElement = false
