@@ -2,6 +2,7 @@ import Woopra from 'woopra'
 import $ from 'jquery'
 import is from 'is_js'
 import _ from 'underscore'
+import ujdkPreferences from './ujdkPreferences'
 
 /*
  * UJDK
@@ -43,7 +44,7 @@ class UJDK {
 		this._is_ssl = ssl
 		this._domain = domain
 
-		this._preferences = []
+		this._preferences = ujdkPreferences
 
 		this._allowed_urls = [
         	'http://example.org:8081',
@@ -74,12 +75,12 @@ class UJDK {
 			&& typeof this._uid !== 'undefined'
 			&& this.inIframe() == false
 			&& this.overrideWUID() == false ) {
+
 			this._woopra.identify( this._uid, {
 			    channel: this._channel,
 			    uj: this._uj
 			}).push()
 		}
-
 	}
 
 
@@ -190,58 +191,65 @@ class UJDK {
 	 */
 	trackAll() {
 
-		$.ajax({
-	      	url: 'https://sheetsu.com/apis/33dcdcd9',
-	      	method: 'GET',
-	      	dataType: 'json',
-	      	success: (( data ) => {
+		let preferences = this._preferences
 
-	      		$( 'a, span, div, select, input, form, button' ).on( "click mousedown mouseup focus blur keydown keyup change", function( e ) {
+		$( 'a, span, select, input, form, button' ).on( "click keydown keyup change", function( e ) {
+			console.log( e )
+			// debugger
+			_.each( preferences, ( value ) => {
 
-	      			_.each( data.result, ( value ) => {
+				let isElement = false
+				let useClass = ''
+				let useId = ''
 
-						let isElement = false
-						let useClass = ''
-						let useId = ''
+				let events = JSON.parse( value.events )
 
-	      				let events = JSON.parse( value.events )
+				if ( value.element.indexOf( '.' ) !== -1 ) {
+					 useClass = value.element.substring( 1 )
+				}
 
-						if ( value.element.indexOf( '.' ) !== -1 ) {
-							 useClass = value.element.substring( 1 )
-						}
+				else if ( value.element.indexOf( '#' ) !== -1 ) {
+					 useId = value.element.substring( 1 )
+				}
 
-						else if ( value.element.indexOf( '#' ) !== -1 ) {
-							 useId = value.element.substring( 1 )
-						}
+				else {
+					isElement = true
+				}
 
-						else {
-							isElement = true
-						}
+				if ( events.indexOf( e.type ) != -1
+					&& ( ( useClass.length > 2 && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
+					|| ( isElement && e.target.localName == value.element ) ) {
 
-	      				if ( events.indexOf( e.type ) != -1
-							&& ( ( useClass.length > 2 && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
-							|| ( isElement && e.target.localName == value.element ) ) {
+					this.track( value.name || 'usuario logueandose', {
+						description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
+						text: e.target.innerText,
+						targetElement: e.target.outerHTML
+					})
+				}
 
-							console.log( $( e.target ).hasClass( useClass ) )
+				else
+					console.log( e.type, 'no run' )
 
-	      					this.track( value.name || 'usuario logueandose', {
-						    	description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
-								text: e.target.innerText,
-								targetElement: e.target.outerHTML
-							})
-	      				}
+				// Use for kill the process
+				// r++
 
-	      				else
-	      					console.log( e.type, 'no run' )
+			})
 
-	      			})
+		}.bind( this ))
 
-				}.bind( this ))
-	      	}),
-	      	error: (( error ) => {
-	      		console.log( error )
-	      	})
-	    })
+		// $.ajax({
+	    //   	url: 'https://sheetsu.com/apis/33dcdcd9',
+	    //   	method: 'GET',
+	    //   	dataType: 'json',
+	    //   	success: (( data ) => {
+		// 		let r = 1
+		//
+	    //
+	    //   	}),
+	    //   	error: (( error ) => {
+	    //   		console.log( error )
+	    //   	})
+	    // })
 
 	}
 
