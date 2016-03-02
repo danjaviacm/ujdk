@@ -1,6 +1,5 @@
 import Woopra from 'woopra'
 import $ from 'jquery'
-import is from 'is_js'
 import _ from 'underscore'
 import ujdkPreferences from './ujdkPreferences'
 
@@ -335,6 +334,11 @@ class UJDK {
 
 	}
 
+	/*
+	 * overrideWUID
+	 *
+	 * override object
+	 */
 	overrideWUID () {
 
 		if ( localStorage.wuid ) {
@@ -357,6 +361,27 @@ class UJDK {
 			return false
 		}
 	}
+
+
+	/*
+	 * send
+	 *
+	 * send wuid to the server for making possible recover it
+	 * in the near future
+	 */
+	 send ( wuid ) {
+		 // prepare data to be send to server
+	 }
+
+
+ 	/*
+ 	 * populate
+ 	 *
+ 	 * populate woopra data on each step
+ 	 */
+	 populate ( data ) {
+		 // save data form user and assign into woopra's info into identify method
+	 }
 
 
 	/*
