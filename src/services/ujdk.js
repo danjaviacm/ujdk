@@ -216,7 +216,7 @@ class UJDK {
 				}
 
 				if ( events.indexOf( e.type ) != -1
-					&& ( ( useClass.length > 2 && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
+					&& ( ( useClass.length > 2 && value.type == e.target.localName && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
 					|| ( isElement && e.target.localName == value.element ) ) {
 
 					this.track( value.name || 'usuario logueandose', {
@@ -228,9 +228,6 @@ class UJDK {
 
 				else
 					console.log( e.type, 'no run' )
-
-				// Use for kill the process
-				// r++
 
 			})
 
