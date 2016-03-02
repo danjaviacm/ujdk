@@ -194,14 +194,14 @@ class UJDK {
 		let preferences = this._preferences
 
 		$( 'a, span, select, input, form, button' ).on( "click keydown keyup change", function( e ) {
-			
+
 			_.each( preferences, ( value ) => {
 
 				let isElement = false
 				let useClass = ''
 				let useId = ''
 
-				let events = JSON.parse( value.events )
+				let events = value.events
 
 				if ( value.element.indexOf( '.' ) !== -1 ) {
 					 useClass = value.element.substring( 1 )
