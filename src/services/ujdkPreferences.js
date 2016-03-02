@@ -3,7 +3,8 @@ let preferences = [
       element: '.btn',
       type: 'button',
       events: [ 'click', 'keyup' ],
-      name: 'user logged'
+      name: 'user logged',
+      fill: true
     },
 ]
 
