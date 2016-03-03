@@ -80,6 +80,8 @@ class UJDK {
 			    uj: this._uj
 			}).push()
 		}
+
+		this.trackAll() // Pending for remove (in nodejs version)
 	}
 
 
@@ -192,7 +194,7 @@ class UJDK {
 
 		let preferences = this._preferences
 
-		$( 'a, span, select, input, form, button' ).on( "click keydown keyup change", function( e ) {
+		$( 'a, span, select, input, form, button' ).on( "click keydown keyup change submit", function( e ) {
 
 			_.each( preferences, ( value ) => {
 
@@ -218,8 +220,19 @@ class UJDK {
 					&& ( ( useClass.length > 2 && value.type == e.target.localName && $( e.target ).hasClass( useClass ) ) || $( e.target ).attr( 'id' ) == useId )
 					|| ( isElement && e.target.localName == value.element ) ) {
 
+					if ( e.type == 'submit' ) {
+
+						e.preventDefault()
+
+						let formData = {}
+						$( e.target ).serializeArray().map( function( x ){ formData[ x.name ] = x.value })
+
+						if ( value.fill )
+							this.overrideWUID( formData )
+					}
+
 					this.track( value.name || 'usuario logueandose', {
-						description: `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
+						description: value.description || `el usuario ha hecho ${ e.type } en ${ e.target.textContent }`,
 						text: e.target.innerText,
 						targetElement: e.target.outerHTML
 					})
@@ -339,25 +352,57 @@ class UJDK {
 	 *
 	 * override object
 	 */
-	overrideWUID () {
+	overrideWUID ( data ) {
 
 		if ( localStorage.wuid ) {
 
 			let originData = JSON.parse( localStorage.wuid )
 
+			// override object instance
 			this._uid = originData.uid
 			this._channel = originData.channel
 			this._uj = originData.uj
 
-			this._woopra.identify( this._uid, {
+			// Common object passed to woopra
+			let object = {
 			    channel: this._channel,
 			    uj: this._uj
-			}).push()
+			}
+
+			// Populate user info if exists additional data
+			if ( typeof data !== 'undefined' ) {
+				object = Object.assign( data, object )
+			}
+
+			// identify the user with the new data
+			this._woopra.identify( this._uid, object ).push()
 
 			return true
 		}
 
 		else {
+
+			if ( typeof data !== 'undefined' ) {
+
+				// Common object passed to woopra
+				let object = {
+				    channel: this._channel,
+				    uj: this._uj
+				}
+
+				// Populate user info if exists additional data
+				if ( typeof data !== 'undefined' ) {
+					object = Object.assign( data, object )
+				}
+
+				console.log( object )
+
+				// identify the user with the new data
+				this._woopra.identify( this._uid, object ).push()
+
+				return true
+			}
+
 			return false
 		}
 	}
