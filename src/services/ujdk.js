@@ -36,7 +36,6 @@ class UJDK {
 		if ( typeof uid === 'undefined' )
 			uid = `user-${ Date.now() }-${ Math.floor( ( Math.random() * 100 ) + 1 ) }`
 
-
 		this._channel = channel
 		this._uj = uj
 		this._uid = uid
